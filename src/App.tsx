@@ -1,27 +1,23 @@
-import React, { useState } from "react";
-import TodoList from "./components/TodoList";
-import { Fab } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import styled from "@emotion/styled";
-import InputTodo from "./components/InputTodo";
+import React from "react";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
+import { BrowserRouter, Route, Link } from "react-router-dom";
+import TodoCardPage from "./components/pages/TodoCardPage";
+import TodoListPage from "./containers/TodoListPage";
 
 const App: React.FC = () => {
-  const [isDialogOpen, setDialogOpen] = useState(false);
   return (
     <>
-      <TodoList />
-      <FabContainer color="secondary">
-        <AddIcon onClick={() => setDialogOpen(true)} />
-      </FabContainer>
-      <InputTodo onClose={() => setDialogOpen(false)} open={isDialogOpen} />
+      <BrowserRouter>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">Todoアプリ</Typography>
+          </Toolbar>
+        </AppBar>
+        <Route exact path="/" component={TodoCardPage} />
+        <Route path="/todoList" component={TodoListPage} />
+      </BrowserRouter>
     </>
   );
 };
 
 export default App;
-
-const FabContainer = styled(Fab)`
-  position: fixed !important;
-  right: 10px;
-  bottom: 10px;
-`;
