@@ -1,8 +1,9 @@
 export enum TodoActionType {
-  ADD_TODO = "ADD_TODO"
+  ADD_TODO = "ADD_TODO",
+  TOGGLE_CHECKED = "TOGGLE_CHECKED"
 }
 
-export interface AddTodoAction {
+interface AddTodoAction {
   type: TodoActionType.ADD_TODO;
   payload: {
     id: number;
@@ -22,4 +23,23 @@ export const addTodo = (text: string): AddTodoAction => ({
   }
 });
 
-export type TodoAction = AddTodoAction;
+interface ToggleCheckedAction {
+  type: TodoActionType.TOGGLE_CHECKED;
+  payload: {
+    id: number;
+    completed: boolean;
+  };
+}
+
+export const toggleChecked = (
+  id: number,
+  checked: boolean
+): ToggleCheckedAction => ({
+  type: TodoActionType.TOGGLE_CHECKED,
+  payload: {
+    id: id,
+    completed: checked
+  }
+});
+
+export type TodoAction = AddTodoAction | ToggleCheckedAction;

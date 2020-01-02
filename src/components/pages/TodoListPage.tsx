@@ -9,14 +9,18 @@ import { Todo } from "../../redux/reducers/todo";
 interface TodoListPageProps {
   todos: Todo[];
   addTodo: (input: string) => void;
+  toggleChecked: (id: number, checked: boolean) => void;
 }
 
-const TodoListPage: React.FC<TodoListPageProps> = ({ todos, addTodo }) => {
+const TodoListPage: React.FC<TodoListPageProps> = ({
+  todos,
+  addTodo,
+  toggleChecked
+}) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   return (
     <>
-      <TodoList todos={todos} />
-      {console.log()}
+      <TodoList todos={todos} toggleChecked={toggleChecked} />
       <FabContainer color="secondary" onClick={() => setDialogOpen(true)}>
         <AddIcon />
       </FabContainer>

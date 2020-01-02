@@ -27,6 +27,14 @@ const TodoReducer = (
           completed: false
         })
       };
+    case TodoActionType.TOGGLE_CHECKED:
+      return {
+        todos: state.todos.map(todo => {
+          return todo.id === action.payload.id
+            ? { ...todo, completed: action.payload.completed }
+            : todo;
+        })
+      };
 
     default:
       return state;

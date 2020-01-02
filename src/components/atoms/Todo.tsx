@@ -11,13 +11,15 @@ import { Todo as TodoType } from "../../redux/reducers/todo";
 
 interface TodoProps {
   todo: TodoType;
+  toggleChecked: (id: number, checked: boolean) => void;
 }
 
-const Todo: React.FC<TodoProps> = ({ todo }) => {
+const Todo: React.FC<TodoProps> = ({ todo, toggleChecked }) => {
   const [checked, setChecked] = useState(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
+    toggleChecked(todo.id, checked);
   };
   return (
     <ListContainer>
