@@ -35,6 +35,14 @@ const TodoReducer = (
             : todo;
         })
       };
+    case TodoActionType.EDITING_TODO:
+      return {
+        todos: state.todos.map(todo => {
+          return todo.id === action.payload.id
+            ? { ...todo, text: action.payload.text }
+            : todo;
+        })
+      };
 
     default:
       return state;
