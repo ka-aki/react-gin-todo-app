@@ -17,13 +17,11 @@ interface TodoProps {
 }
 
 const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
-  const [checked, setChecked] = useState(true);
   const [edited, setEdited] = useState(false);
   const [editedText, setEditedText] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    toggleChecked(todo.id, checked);
+    toggleChecked(todo.id, !todo.completed);
   };
 
   const edit = () => {
@@ -38,7 +36,7 @@ const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
           <ListItemIcon>
             <Checkbox
               edge="start"
-              checked={checked}
+              checked={todo.completed}
               onChange={handleChange}
               disableRipple
             />
@@ -78,9 +76,8 @@ const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
 export default Todo;
 
 const ListContainer = styled.div`
-  display: inline-block;
-  text-align: center;
-  width: 500px;
+  width: 700px;
+  margin: 10px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   transition: 0.3s;
 `;

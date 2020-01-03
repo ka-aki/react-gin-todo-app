@@ -15,18 +15,25 @@ const TodoList: React.FC<TodoListProps> = ({
   editingTodo
 }) => {
   return (
-    <ul>
+    <Container>
       {todos && todos.length >= 1
-        ? todos.map((todo, i) => (
+        ? todos.map(todo => (
             <Todo
               todo={todo}
               toggleChecked={toggleChecked}
               editingTodo={editingTodo}
             />
           ))
-        : "No Todo!"}
-    </ul>
+        : "yey! no todos!"}
+    </Container>
   );
 };
 
 export default TodoList;
+
+const Container = styled.ul`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 100px 0;
+`;
