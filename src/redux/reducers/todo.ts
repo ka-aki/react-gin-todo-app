@@ -19,7 +19,7 @@ const TodoReducer = (
   action: TodoAction
 ): TodoState => {
   switch (action.type) {
-    case TodoActionType.ADD_TODO:
+    case "ADD_TODO_SUCCESS":
       return {
         todos: state.todos.concat({
           id: action.payload.id,
