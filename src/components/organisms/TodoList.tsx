@@ -17,9 +17,10 @@ const TodoList: React.FC<TodoListProps> = ({
   return (
     <Container>
       {todos && todos.length >= 1
-        ? todos.map(todo => (
+        ? todos.map((todo, index) => (
             <Todo
               todo={todo}
+              key={index}
               toggleChecked={toggleChecked}
               editingTodo={editingTodo}
             />

@@ -45,7 +45,10 @@ const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
             <ListItemText>
               <TextField
                 autoFocus
+                fullWidth
+                placeholder={todo.text}
                 onChange={e => setEditedText(e.target.value)}
+                style={{ width: 400 }}
               />
             </ListItemText>
           ) : (
