@@ -12,8 +12,8 @@ import { TextField } from "@material-ui/core";
 
 interface TodoProps {
   todo: TodoType;
-  toggleChecked: (id: number, checked: boolean) => void;
-  editingTodo: (id: number, editedText: string) => void;
+  toggleChecked: (ID: number, checked: boolean) => void;
+  editingTodo: (ID: number, editedText: string) => void;
 }
 
 const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
@@ -21,11 +21,11 @@ const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
   const [editedText, setEditedText] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    toggleChecked(todo.id, !todo.completed);
+    toggleChecked(todo.ID, !todo.completed);
   };
 
   const edit = () => {
-    editingTodo(todo.id, editedText);
+    editingTodo(todo.ID, editedText);
     setEdited(false);
   };
 

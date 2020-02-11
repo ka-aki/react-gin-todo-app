@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -9,17 +9,22 @@ import { Todo } from "../../redux/reducers/todo";
 interface TodoListPageProps {
   todos: Todo[];
   addTodo: (input: string) => void;
-  toggleChecked: (id: number, checked: boolean) => void;
-  editingTodo: (id: number, editedText: string) => void;
+  toggleChecked: (ID: number, checked: boolean) => void;
+  editingTodo: (ID: number, editedText: string) => void;
+  getTodos: () => void;
 }
 
 const TodoListPage: React.FC<TodoListPageProps> = ({
   todos,
   addTodo,
   toggleChecked,
-  editingTodo
+  editingTodo,
+  getTodos
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
+  useEffect(() => {
+    getTodos();
+  }, []);
   return (
     <>
       <TodoList

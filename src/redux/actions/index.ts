@@ -1,5 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { ApplicationState } from "../reducers";
+import { Todo } from "../reducers/todo";
 
 export enum TodoActionType {
   ADD_TODO = "ADD_TODO",
@@ -7,7 +8,10 @@ export enum TodoActionType {
   ADD_TODO_SUCCESS = "ADD_TODO_SUCCESS",
   ADD_TODO_ERROR = "ADD_TODO_ERROR",
   TOGGLE_CHECKED = "TOGGLE_CHECKED",
-  EDITING_TODO = "EDITING_TODO"
+  EDITING_TODO = "EDITING_TODO",
+  GET_TODOS_REQUEST = "GET_TODOS_REQUEST",
+  GET_TODOS_SUCCESS = "GET_TODOS_SUCCESS",
+  GET_TODOS_FAIL = "GET_TODOS_FAIL"
 }
 
 interface AddTodoRequest {
@@ -21,15 +25,15 @@ const addTodoRequest = (): AddTodoRequest => ({
 interface AddTodoSuccess {
   type: TodoActionType.ADD_TODO_SUCCESS;
   payload: {
-    id: number;
+    ID: number;
     text: string;
   };
 }
 
-const addTodoSuccess = (id: number, text: string): AddTodoSuccess => ({
+const addTodoSuccess = (ID: number, text: string): AddTodoSuccess => ({
   type: TodoActionType.ADD_TODO_SUCCESS,
   payload: {
-    id,
+    ID,
     text
   }
 });
@@ -66,21 +70,73 @@ export const addTodo = (
     .catch(error => dispatch(addTodoFail(error)));
 };
 
+interface GetTodosRequest {
+  type: TodoActionType.GET_TODOS_REQUEST;
+}
+
+const getTodosRequest = (): GetTodosRequest => ({
+  type: TodoActionType.GET_TODOS_REQUEST
+});
+
+interface GetTodosSuccess {
+  type: TodoActionType.GET_TODOS_SUCCESS;
+  payload: {
+    todos: Todo[];
+  };
+}
+
+const getTodosSuccess = (todos: Todo[]): GetTodosSuccess => ({
+  type: TodoActionType.GET_TODOS_SUCCESS,
+  payload: {
+    todos
+  }
+});
+
+interface GetTodosFail {
+  type: TodoActionType.GET_TODOS_FAIL;
+  payload: {
+    error: Error;
+  };
+}
+const getTodosFail = (error: Error): GetTodosFail => ({
+  type: TodoActionType.GET_TODOS_FAIL,
+  payload: {
+    error: error
+  }
+});
+
+export const getTodos = (): ThunkAction<
+  void,
+  ApplicationState,
+  undefined,
+  TodoAction
+> => async dispatch => {
+  dispatch(getTodosRequest());
+  try {
+    const response = await fetch("http://localhost:8080/todos");
+    const data = await response.json();
+    console.log(response, "response");
+    dispatch(getTodosSuccess(data));
+  } catch (error) {
+    dispatch(getTodosFail(error));
+  }
+};
+
 interface ToggleCheckedAction {
   type: TodoActionType.TOGGLE_CHECKED;
   payload: {
-    id: number;
+    ID: number;
     completed: boolean;
   };
 }
 
 export const toggleChecked = (
-  id: number,
+  ID: number,
   checked: boolean
 ): ToggleCheckedAction => ({
   type: TodoActionType.TOGGLE_CHECKED,
   payload: {
-    id: id,
+    ID: ID,
     completed: checked
   }
 });
@@ -88,15 +144,15 @@ export const toggleChecked = (
 interface EditingTodo {
   type: TodoActionType.EDITING_TODO;
   payload: {
-    id: number;
+    ID: number;
     text: string;
   };
 }
 
-export const editingTodo = (id: number, text: string) => ({
+export const editingTodo = (ID: number, text: string) => ({
   type: TodoActionType.EDITING_TODO,
   payload: {
-    id,
+    ID,
     text
   }
 });
@@ -106,4 +162,7 @@ export type TodoAction =
   | AddTodoRequest
   | AddTodoSuccess
   | AddTodoFail
-  | EditingTodo;
+  | EditingTodo
+  | GetTodosRequest
+  | GetTodosSuccess
+  | GetTodosFail;

@@ -1,7 +1,7 @@
 import { TodoActionType, TodoAction } from "../actions";
 
 export interface Todo {
-  id: number;
+  ID: number;
   text: string;
   completed: boolean;
 }
@@ -19,10 +19,10 @@ const TodoReducer = (
   action: TodoAction
 ): TodoState => {
   switch (action.type) {
-    case "ADD_TODO_SUCCESS":
+    case TodoActionType.ADD_TODO_SUCCESS:
       return {
         todos: state.todos.concat({
-          id: action.payload.id,
+          ID: action.payload.ID,
           text: action.payload.text,
           completed: false
         })
@@ -30,7 +30,7 @@ const TodoReducer = (
     case TodoActionType.TOGGLE_CHECKED:
       return {
         todos: state.todos.map(todo => {
-          return todo.id === action.payload.id
+          return todo.ID === action.payload.ID
             ? { ...todo, completed: action.payload.completed }
             : todo;
         })
@@ -38,10 +38,14 @@ const TodoReducer = (
     case TodoActionType.EDITING_TODO:
       return {
         todos: state.todos.map(todo => {
-          return todo.id === action.payload.id
+          return todo.ID === action.payload.ID
             ? { ...todo, text: action.payload.text }
             : todo;
         })
+      };
+    case TodoActionType.GET_TODOS_SUCCESS:
+      return {
+        todos: action.payload.todos
       };
 
     default:

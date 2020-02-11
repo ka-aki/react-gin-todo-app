@@ -1,5 +1,10 @@
 import { connect } from "react-redux";
-import { addTodo, toggleChecked, editingTodo } from "../redux/actions";
+import {
+  addTodo,
+  toggleChecked,
+  editingTodo,
+  getTodos
+} from "../redux/actions";
 import TodoListPage from "../components/pages/TodoListPage";
 import { ApplicationState } from "../redux/reducers";
 
@@ -12,9 +17,10 @@ const mapStateToProps = (state: ApplicationState) => {
 const mapDispatchToProps = (dispatch: (action: any) => void) => {
   return {
     addTodo: (input: string) => dispatch(addTodo(input)),
-    toggleChecked: (id: number, checked: boolean) =>
-      dispatch(toggleChecked(id, checked)),
-    editingTodo: (id: number, text: string) => dispatch(editingTodo(id, text))
+    toggleChecked: (ID: number, checked: boolean) =>
+      dispatch(toggleChecked(ID, checked)),
+    editingTodo: (ID: number, text: string) => dispatch(editingTodo(ID, text)),
+    getTodos: () => dispatch(getTodos())
   };
 };
 
