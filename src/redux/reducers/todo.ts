@@ -27,7 +27,7 @@ const TodoReducer = (
           completed: false
         })
       };
-    case TodoActionType.TOGGLE_CHECKED:
+    case TodoActionType.TOGGLE_CHECKED_SUCCESS:
       return {
         todos: state.todos.map(todo => {
           return todo.ID === action.payload.ID
@@ -35,7 +35,7 @@ const TodoReducer = (
             : todo;
         })
       };
-    case TodoActionType.EDITING_TODO:
+    case TodoActionType.EDIT_TODO_SUCCESS:
       return {
         todos: state.todos.map(todo => {
           return todo.ID === action.payload.ID

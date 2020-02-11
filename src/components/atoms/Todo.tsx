@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Checkbox from "@material-ui/core/Checkbox";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Button from "@material-ui/core/Button";
 import styled from "@emotion/styled";
 import { Todo as TodoType } from "../../redux/reducers/todo";
-import { TextField } from "@material-ui/core";
+import { TextField, IconButton, FormControlLabel } from "@material-ui/core";
+
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
 
 interface TodoProps {
   todo: TodoType;
@@ -33,14 +37,18 @@ const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
     <ListContainer>
       <List>
         <ListItem>
-          <ListItemIcon>
-            <Checkbox
-              edge="start"
-              checked={todo.completed}
-              onChange={handleChange}
-              disableRipple
-            />
-          </ListItemIcon>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={todo.completed}
+                onChange={handleChange}
+                disableRipple
+                icon={<CheckBoxOutlineBlankIcon style={{ fontSize: 25 }} />}
+                checkedIcon={<CheckBoxIcon style={{ fontSize: 25 }} />}
+              />
+            }
+            label=""
+          />
           {edited ? (
             <ListItemText>
               <TextField
@@ -65,9 +73,12 @@ const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
             </ListItemSecondaryAction>
           ) : (
             <ListItemSecondaryAction>
-              <Button color="primary" onClick={() => setEdited(true)}>
-                Edit
-              </Button>
+              <IconButton aria-label="edit" onClick={() => setEdited(true)}>
+                <EditIcon />
+              </IconButton>
+              <IconButton aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
             </ListItemSecondaryAction>
           )}
         </ListItem>

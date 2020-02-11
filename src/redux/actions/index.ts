@@ -7,8 +7,12 @@ export enum TodoActionType {
   ADD_TODO_REQUEST = "ADD_TODO_REQUEST",
   ADD_TODO_SUCCESS = "ADD_TODO_SUCCESS",
   ADD_TODO_ERROR = "ADD_TODO_ERROR",
-  TOGGLE_CHECKED = "TOGGLE_CHECKED",
-  EDITING_TODO = "EDITING_TODO",
+  TOGGLE_CHECKED_REQUEST = "TOGGLE_CHECKED_REQUEST",
+  TOGGLE_CHECKED_SUCCESS = "TOGGLE_CHECKED_SUCCESS",
+  TOGGLE_CHECKED_FAIL = "TOGGLE_CHECKED_FAIL",
+  EDIT_TODO_REQUEST = "EDIT_TODO_REQUEST",
+  EDIT_TODO_SUCCESS = "EDIT_TODO_SUCCESS",
+  EDIT_TODO_FAIL = "EDIT_TODO_FAIL",
   GET_TODOS_REQUEST = "GET_TODOS_REQUEST",
   GET_TODOS_SUCCESS = "GET_TODOS_SUCCESS",
   GET_TODOS_FAIL = "GET_TODOS_FAIL"
@@ -61,7 +65,7 @@ export const addTodo = (
   TodoAction
 > => async (dispatch, getState) => {
   dispatch(addTodoRequest());
-  await fetch(`http://localhost:8080/todos`, {
+  await fetch("http://localhost:8080/todos", {
     method: "POST",
     body: JSON.stringify({ text, completed: false })
   })
@@ -106,7 +110,7 @@ const getTodosFail = (error: Error): GetTodosFail => ({
 });
 
 export const getTodos = (): ThunkAction<
-  void,
+  Promise<void>,
   ApplicationState,
   undefined,
   TodoAction
@@ -115,54 +119,147 @@ export const getTodos = (): ThunkAction<
   try {
     const response = await fetch("http://localhost:8080/todos");
     const data = await response.json();
-    console.log(response, "response");
     dispatch(getTodosSuccess(data));
   } catch (error) {
     dispatch(getTodosFail(error));
   }
 };
 
-interface ToggleCheckedAction {
-  type: TodoActionType.TOGGLE_CHECKED;
+interface ToggleCheckedRequest {
+  type: TodoActionType.TOGGLE_CHECKED_REQUEST;
+}
+
+const toggleCheckedRequest = (): ToggleCheckedRequest => ({
+  type: TodoActionType.TOGGLE_CHECKED_REQUEST
+});
+
+interface ToggleCheckedSuccess {
+  type: TodoActionType.TOGGLE_CHECKED_SUCCESS;
   payload: {
     ID: number;
     completed: boolean;
   };
 }
 
-export const toggleChecked = (
+export const toggleCheckedSuccess = (
   ID: number,
   checked: boolean
-): ToggleCheckedAction => ({
-  type: TodoActionType.TOGGLE_CHECKED,
+): ToggleCheckedSuccess => ({
+  type: TodoActionType.TOGGLE_CHECKED_SUCCESS,
   payload: {
     ID: ID,
     completed: checked
   }
 });
 
-interface EditingTodo {
-  type: TodoActionType.EDITING_TODO;
+interface ToggleCheckedFail {
+  type: TodoActionType.TOGGLE_CHECKED_FAIL;
+  payload: {
+    error: Error;
+  };
+}
+
+const toggleCheckedFail = (error: Error): ToggleCheckedFail => ({
+  type: TodoActionType.TOGGLE_CHECKED_FAIL,
+  payload: {
+    error
+  }
+});
+
+export const toggleChecked = (
+  ID: number,
+  checked: boolean
+): ThunkAction<
+  Promise<void>,
+  ApplicationState,
+  undefined,
+  TodoAction
+> => async dispatch => {
+  dispatch(toggleCheckedRequest());
+  try {
+    const response = await fetch(`http://localhost:8080/todos/${ID}`, {
+      method: "PUT",
+      body: JSON.stringify({ completed: checked })
+    });
+    const data = await response.json();
+    dispatch(toggleCheckedSuccess(data.ID, data.completed));
+  } catch (error) {
+    dispatch(toggleCheckedFail(error));
+  }
+};
+
+interface EditTodoRequest {
+  type: TodoActionType.EDIT_TODO_REQUEST;
+}
+
+const editTodoRequest = (): EditTodoRequest => ({
+  type: TodoActionType.EDIT_TODO_REQUEST
+});
+
+interface EditTodoSuccess {
+  type: TodoActionType.EDIT_TODO_SUCCESS;
   payload: {
     ID: number;
     text: string;
   };
 }
 
-export const editingTodo = (ID: number, text: string) => ({
-  type: TodoActionType.EDITING_TODO,
+const editTodoSuccess = (ID: number, text: string): EditTodoSuccess => ({
+  type: TodoActionType.EDIT_TODO_SUCCESS,
   payload: {
     ID,
     text
   }
 });
 
+interface EditTodoFail {
+  type: TodoActionType.EDIT_TODO_FAIL;
+  payload: {
+    error: Error;
+  };
+}
+
+const editTodoFail = (error: Error): EditTodoFail => ({
+  type: TodoActionType.EDIT_TODO_FAIL,
+  payload: {
+    error
+  }
+});
+
+export const editTodo = (
+  ID: number,
+  text: string
+): ThunkAction<
+  Promise<void>,
+  ApplicationState,
+  undefined,
+  TodoAction
+> => async dispatch => {
+  dispatch(editTodoRequest());
+
+  try {
+    const response = await fetch(`http://localhost:8080/todos/${ID}`, {
+      method: "PUT",
+      body: JSON.stringify({ ID, text })
+    });
+
+    const data = await response.json();
+    dispatch(editTodoSuccess(data.ID, data.text));
+  } catch (error) {
+    dispatch(editTodoFail(error));
+  }
+};
+
 export type TodoAction =
-  | ToggleCheckedAction
+  | ToggleCheckedRequest
+  | ToggleCheckedSuccess
+  | ToggleCheckedFail
   | AddTodoRequest
   | AddTodoSuccess
   | AddTodoFail
-  | EditingTodo
+  | EditTodoRequest
+  | EditTodoSuccess
+  | EditTodoFail
   | GetTodosRequest
   | GetTodosSuccess
   | GetTodosFail;
