@@ -9,7 +9,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Button from "@material-ui/core/Button";
 import styled from "@emotion/styled";
 import { Todo as TodoType } from "../../redux/reducers/todo";
-import { TextField, IconButton, FormControlLabel } from "@material-ui/core";
+import {
+  TextField,
+  IconButton,
+  FormControlLabel,
+  Tooltip
+} from "@material-ui/core";
 
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
@@ -30,10 +35,6 @@ const Todo: React.FC<TodoProps> = ({
   const [edited, setEdited] = useState(false);
   const [editedText, setEditedText] = useState("");
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    toggleChecked(todo.ID, !todo.completed);
-  };
-
   const edit = () => {
     editTodo(todo.ID, editedText);
     setEdited(false);
@@ -47,7 +48,7 @@ const Todo: React.FC<TodoProps> = ({
             control={
               <Checkbox
                 checked={todo.completed}
-                onChange={handleChange}
+                onChange={() => toggleChecked(todo.ID, !todo.completed)}
                 disableRipple
                 icon={<CheckBoxOutlineBlankIcon style={{ fontSize: 25 }} />}
                 checkedIcon={<CheckBoxIcon style={{ fontSize: 25 }} />}
@@ -79,15 +80,19 @@ const Todo: React.FC<TodoProps> = ({
             </ListItemSecondaryAction>
           ) : (
             <ListItemSecondaryAction>
-              <IconButton aria-label="edit" onClick={() => setEdited(true)}>
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                aria-label="delete"
-                onClick={() => deleteTodo(todo.ID)}
-              >
-                <DeleteIcon />
-              </IconButton>
+              <Tooltip title="Edit" placement="top">
+                <IconButton aria-label="edit" onClick={() => setEdited(true)}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Delete" placement="top">
+                <IconButton
+                  aria-label="delete"
+                  onClick={() => deleteTodo(todo.ID)}
+                >
+                  <DeleteIcon color="error" />
+                </IconButton>
+              </Tooltip>
             </ListItemSecondaryAction>
           )}
         </ListItem>
@@ -100,7 +105,7 @@ export default Todo;
 
 const ListContainer = styled.div`
   width: 700px;
-  margin: 10px 0;
+  margin: 15px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   transition: 0.3s;
 `;
