@@ -10,16 +10,18 @@ interface TodoListPageProps {
   todos: Todo[];
   addTodo: (input: string) => void;
   toggleChecked: (ID: number, checked: boolean) => void;
-  editingTodo: (ID: number, editedText: string) => void;
+  editTodo: (ID: number, editedText: string) => void;
   getTodos: () => void;
+  deleteTodo: (ID: number) => void;
 }
 
 const TodoListPage: React.FC<TodoListPageProps> = ({
   todos,
   addTodo,
   toggleChecked,
-  editingTodo,
-  getTodos
+  editTodo,
+  getTodos,
+  deleteTodo
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   useEffect(() => {
@@ -30,7 +32,8 @@ const TodoListPage: React.FC<TodoListPageProps> = ({
       <TodoList
         todos={todos}
         toggleChecked={toggleChecked}
-        editingTodo={editingTodo}
+        editTodo={editTodo}
+        deleteTodo={deleteTodo}
       />
       <FabContainer color="secondary" onClick={() => setDialogOpen(true)}>
         <AddIcon />

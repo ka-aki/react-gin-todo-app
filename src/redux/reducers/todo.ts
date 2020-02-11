@@ -43,6 +43,12 @@ const TodoReducer = (
             : todo;
         })
       };
+    case TodoActionType.DELETE_TODO_SUCCESS:
+      return {
+        todos: state.todos.filter(todo => {
+          return todo.ID !== action.payload.ID;
+        })
+      };
     case TodoActionType.GET_TODOS_SUCCESS:
       return {
         todos: action.payload.todos

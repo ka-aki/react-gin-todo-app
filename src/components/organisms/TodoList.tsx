@@ -6,13 +6,15 @@ import styled from "@emotion/styled";
 interface TodoListProps {
   todos: TodoType[];
   toggleChecked: (ID: number, checked: boolean) => void;
-  editingTodo: (ID: number, editedText: string) => void;
+  editTodo: (ID: number, editedText: string) => void;
+  deleteTodo: (ID: number) => void;
 }
 
 const TodoList: React.FC<TodoListProps> = ({
   todos,
   toggleChecked,
-  editingTodo
+  editTodo,
+  deleteTodo
 }) => {
   return (
     <Container>
@@ -22,7 +24,8 @@ const TodoList: React.FC<TodoListProps> = ({
               todo={todo}
               key={index}
               toggleChecked={toggleChecked}
-              editingTodo={editingTodo}
+              editTodo={editTodo}
+              deleteTodo={deleteTodo}
             />
           ))
         : "yey! no todos!"}

@@ -14,7 +14,7 @@ const mapDispatchToProps = (dispatch: (action: any) => void) => {
     addTodo: (input: string) => dispatch(addTodo(input)),
     toggleChecked: (ID: number, checked: boolean) =>
       dispatch(toggleChecked(ID, checked)),
-    editingTodo: (ID: number, text: string) => dispatch(editTodo(ID, text)),
+    editTodo: (ID: number, text: string) => dispatch(editTodo(ID, text)),
     getTodos: () => dispatch(getTodos())
   };
 };

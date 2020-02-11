@@ -15,7 +15,10 @@ export enum TodoActionType {
   EDIT_TODO_FAIL = "EDIT_TODO_FAIL",
   GET_TODOS_REQUEST = "GET_TODOS_REQUEST",
   GET_TODOS_SUCCESS = "GET_TODOS_SUCCESS",
-  GET_TODOS_FAIL = "GET_TODOS_FAIL"
+  GET_TODOS_FAIL = "GET_TODOS_FAIL",
+  DELETE_TODO_REQUEST = "DELETE_TODO_REQUEST",
+  DELETE_TODO_SUCCESS = "DELETE_TODO_SUCCESS",
+  DELETE_TODO_FAIL = "DELETE_TODO_FAIL"
 }
 
 interface AddTodoRequest {
@@ -188,6 +191,63 @@ export const toggleChecked = (
   }
 };
 
+interface DeleteTodoRequest {
+  type: TodoActionType.DELETE_TODO_REQUEST;
+}
+
+const deleteTodoRequest = (): DeleteTodoRequest => ({
+  type: TodoActionType.DELETE_TODO_REQUEST
+});
+
+interface DeleteTodoSuccess {
+  type: TodoActionType.DELETE_TODO_SUCCESS;
+  payload: {
+    ID: number;
+  };
+}
+
+const deleteTodoSuccess = (ID: number): DeleteTodoSuccess => ({
+  type: TodoActionType.DELETE_TODO_SUCCESS,
+  payload: {
+    ID
+  }
+});
+
+interface DeleteTodoFail {
+  type: TodoActionType.DELETE_TODO_FAIL;
+  payload: {
+    error: Error;
+  };
+}
+
+const deleteTodoFail = (error: Error): DeleteTodoFail => ({
+  type: TodoActionType.DELETE_TODO_FAIL,
+  payload: {
+    error
+  }
+});
+
+export const deleteTodo = (
+  ID: number
+): ThunkAction<
+  Promise<void>,
+  ApplicationState,
+  undefined,
+  TodoAction
+> => async dispatch => {
+  dispatch(deleteTodoRequest());
+
+  try {
+    await fetch(`http://localhost:8080/todos/${ID}`, {
+      method: "DELETE",
+      body: JSON.stringify({ ID })
+    });
+    dispatch(deleteTodoSuccess(ID));
+  } catch (error) {
+    dispatch(deleteTodoFail(error));
+  }
+};
+
 interface EditTodoRequest {
   type: TodoActionType.EDIT_TODO_REQUEST;
 }
@@ -262,4 +322,7 @@ export type TodoAction =
   | EditTodoFail
   | GetTodosRequest
   | GetTodosSuccess
-  | GetTodosFail;
+  | GetTodosFail
+  | DeleteTodoRequest
+  | DeleteTodoSuccess
+  | DeleteTodoFail;

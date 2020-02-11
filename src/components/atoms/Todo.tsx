@@ -17,10 +17,16 @@ import CheckBoxIcon from "@material-ui/icons/CheckBox";
 interface TodoProps {
   todo: TodoType;
   toggleChecked: (ID: number, checked: boolean) => void;
-  editingTodo: (ID: number, editedText: string) => void;
+  editTodo: (ID: number, editedText: string) => void;
+  deleteTodo: (ID: number) => void;
 }
 
-const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
+const Todo: React.FC<TodoProps> = ({
+  todo,
+  toggleChecked,
+  editTodo,
+  deleteTodo
+}) => {
   const [edited, setEdited] = useState(false);
   const [editedText, setEditedText] = useState("");
 
@@ -29,7 +35,7 @@ const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
   };
 
   const edit = () => {
-    editingTodo(todo.ID, editedText);
+    editTodo(todo.ID, editedText);
     setEdited(false);
   };
 
@@ -76,7 +82,10 @@ const Todo: React.FC<TodoProps> = ({ todo, toggleChecked, editingTodo }) => {
               <IconButton aria-label="edit" onClick={() => setEdited(true)}>
                 <EditIcon />
               </IconButton>
-              <IconButton aria-label="delete">
+              <IconButton
+                aria-label="delete"
+                onClick={() => deleteTodo(todo.ID)}
+              >
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>
