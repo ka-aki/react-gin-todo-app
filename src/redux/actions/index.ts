@@ -68,7 +68,7 @@ export const addTodo = (
   TodoAction
 > => async (dispatch, getState) => {
   dispatch(addTodoRequest());
-  await fetch("http://localhost:8080/todos", {
+  await fetch("https://react-gin-todo-app.appspot.com/todos", {
     method: "POST",
     body: JSON.stringify({ text, completed: false })
   })
@@ -120,7 +120,9 @@ export const getTodos = (): ThunkAction<
 > => async dispatch => {
   dispatch(getTodosRequest());
   try {
-    const response = await fetch("http://localhost:8080/todos");
+    const response = await fetch(
+      "https://react-gin-todo-app.appspot.com/todos"
+    );
     const data = await response.json();
     dispatch(getTodosSuccess(data));
   } catch (error) {
@@ -180,10 +182,13 @@ export const toggleChecked = (
 > => async dispatch => {
   dispatch(toggleCheckedRequest());
   try {
-    const response = await fetch(`http://localhost:8080/todos/${ID}`, {
-      method: "PUT",
-      body: JSON.stringify({ completed: checked })
-    });
+    const response = await fetch(
+      `https://react-gin-todo-app.appspot.com/${ID}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ completed: checked })
+      }
+    );
     const data = await response.json();
     dispatch(toggleCheckedSuccess(data.ID, data.completed));
   } catch (error) {
@@ -238,7 +243,7 @@ export const deleteTodo = (
   dispatch(deleteTodoRequest());
 
   try {
-    await fetch(`http://localhost:8080/todos/${ID}`, {
+    await fetch(`https://react-gin-todo-app.appspot.com/${ID}`, {
       method: "DELETE",
       body: JSON.stringify({ ID })
     });
@@ -298,10 +303,13 @@ export const editTodo = (
   dispatch(editTodoRequest());
 
   try {
-    const response = await fetch(`http://localhost:8080/todos/${ID}`, {
-      method: "PUT",
-      body: JSON.stringify({ ID, text })
-    });
+    const response = await fetch(
+      `https://react-gin-todo-app.appspot.com/${ID}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ ID, text })
+      }
+    );
 
     const data = await response.json();
     dispatch(editTodoSuccess(data.ID, data.text));
