@@ -183,7 +183,7 @@ export const toggleChecked = (
   dispatch(toggleCheckedRequest());
   try {
     const response = await fetch(
-      `https://react-gin-todo-app.appspot.com/${ID}`,
+      `https://react-gin-todo-app.appspot.com/todos/${ID}`,
       {
         method: "PUT",
         body: JSON.stringify({ completed: checked })
@@ -243,7 +243,7 @@ export const deleteTodo = (
   dispatch(deleteTodoRequest());
 
   try {
-    await fetch(`https://react-gin-todo-app.appspot.com/${ID}`, {
+    await fetch(`https://react-gin-todo-app.appspot.com/todos/${ID}`, {
       method: "DELETE",
       body: JSON.stringify({ ID })
     });
@@ -304,7 +304,7 @@ export const editTodo = (
 
   try {
     const response = await fetch(
-      `https://react-gin-todo-app.appspot.com/${ID}`,
+      `https://react-gin-todo-app.appspot.com/todos/${ID}`,
       {
         method: "PUT",
         body: JSON.stringify({ ID, text })
